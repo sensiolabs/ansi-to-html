@@ -101,8 +101,8 @@ class AnsiToHtmlConverter
 
             // options: bold => 1, underscore => 4, blink => 5, reverse => 7, conceal => 8
             if (in_array(1, $options)) {
-                $fg += 8;
-                $bg += 8;
+                $fg += 10;
+                $bg += 10;
             }
 
             if (in_array(4, $options)) {

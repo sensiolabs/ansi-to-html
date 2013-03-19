@@ -39,6 +39,9 @@ class AnsiToHtmlConverterTest extends \PHPUnit_Framework_TestCase
 
             // color
             array("<span style=\"background-color: red; color: red\">foo</span>", "\e[31;41mfoo\e[0m"),
+
+            // bright color
+            array("<span style=\"background-color: red; color: red\">foo</span>", "\e[31;41;1mfoo\e[0m"),
         );
     }
 }

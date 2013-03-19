@@ -31,21 +31,21 @@ class Theme
     {
         return array(
             'black'   => 'black',
-            'red'     => 'red',
+            'red'     => 'darkred',
             'green'   => 'green',
             'yellow'  => 'yellow',
             'blue'    => 'blue',
-            'magenta' => 'magenta',
+            'magenta' => 'darkmagenta',
             'cyan'    => 'cyan',
             'white'   => 'white',
 
             'brblack'   => 'black',
             'brred'     => 'red',
-            'brgreen'   => 'green',
-            'bryellow'  => 'yellow',
-            'brblue'    => 'blue',
+            'brgreen'   => 'lightgreen',
+            'bryellow'  => 'lightyellow',
+            'brblue'    => 'lightblue',
             'brmagenta' => 'magenta',
-            'brcyan'    => 'cyan',
+            'brcyan'    => 'lightcyan',
             'brwhite'   => 'white',
         );
     }
