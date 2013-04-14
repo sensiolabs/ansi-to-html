@@ -43,6 +43,9 @@ class AnsiToHtmlConverter
         $text = preg_replace('#\e\[(K|s|u|2J|2K|\d+(A|B|C|D|E|F|G|J|K|S|T)|\d+;\d+(H|f))#', '', $text);
         $text = htmlspecialchars($text, ENT_QUOTES, $this->charset);
 
+        // carriage return
+        $text = preg_replace('#^.*\r(?!\n)#m', '', $text);
+
         $tokens = $this->tokenize($text);
 
         // a backspace remove the previous character but only from a text token
