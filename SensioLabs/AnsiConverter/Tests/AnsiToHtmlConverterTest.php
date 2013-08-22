@@ -40,6 +40,9 @@ class AnsiToHtmlConverterTest extends \PHPUnit_Framework_TestCase
             // color
             array("<span style=\"background-color: darkred; color: darkred\">foo</span>", "\e[31;41mfoo\e[0m"),
 
+            // color with [m as a termination (equivalent to [0m])
+            array("<span style=\"background-color: darkred; color: darkred\">foo</span>", "\e[31;41mfoo\e[m"),
+
             // bright color
             array("<span style=\"background-color: red; color: red\">foo</span>", "\e[31;41;1mfoo\e[0m"),
 
