@@ -87,7 +87,7 @@ class AnsiToHtmlConverter
     {
         $bg = 0;
         $fg = 7;
-        if ('0' != $ansi) {
+        if ('0' != $ansi && '' != $ansi) {
             $options = explode(';', $ansi);
 
             foreach ($options as $option) {
@@ -127,7 +127,7 @@ class AnsiToHtmlConverter
     protected function tokenize($text)
     {
         $tokens = array();
-        preg_match_all("/(?:\e\[(.+?)m|(\x08))/", $text, $matches, PREG_OFFSET_CAPTURE);
+        preg_match_all("/(?:\e\[(.*?)m|(\x08))/", $text, $matches, PREG_OFFSET_CAPTURE);
 
         $offset = 0;
         foreach ($matches[0] as $i => $match) {
