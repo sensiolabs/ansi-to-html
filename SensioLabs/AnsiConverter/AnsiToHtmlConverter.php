@@ -72,16 +72,9 @@ class AnsiToHtmlConverter
         }
 
         if ($this->inlineStyles) {
-            $html = sprintf(
-                '<span style="background-color: %s; color: %s; text-decoration: none">%s</span>',
-                $this->inlineColors['black'], $this->inlineColors['white'],
-                $html
-            );
+            $html = sprintf('<span style="background-color: %s; color: %s">%s</span>', $this->inlineColors['black'], $this->inlineColors['white'], $html);
         } else {
-            $html = sprintf(
-                '<span class="ansi_color_fg_black ansi_color_bg_white" style="text-decoration: none">%s</span>',
-                $html
-            );
+            $html = sprintf('<span class="ansi_color_fg_black ansi_color_bg_white">%s</span>', $html);
         }
 
         // remove empty span
@@ -94,7 +87,7 @@ class AnsiToHtmlConverter
     {
         $bg = 0;
         $fg = 7;
-        $td = 'none';
+        $as = '';
         if ('0' != $ansi && '' != $ansi) {
             $options = explode(';', $ansi);
 
@@ -117,7 +110,7 @@ class AnsiToHtmlConverter
             }
 
             if (in_array(4, $options)) {
-                $td = 'underline';
+                $as = '; text-decoration: underline';
             }
 
             if (in_array(7, $options)) {
@@ -126,19 +119,9 @@ class AnsiToHtmlConverter
         }
 
         if ($this->inlineStyles) {
-            return sprintf(
-                '</span><span style="background-color: %s; color: %s; text-decoration: %s">',
-                $this->inlineColors[$this->colorNames[$bg]],
-                $this->inlineColors[$this->colorNames[$fg]],
-                $td
-            );
+            return sprintf('</span><span style="background-color: %s; color: %s%s">', $this->inlineColors[$this->colorNames[$bg]], $this->inlineColors[$this->colorNames[$fg]], $as);
         } else {
-            return sprintf(
-                '</span><span class="ansi_color_bg_%s ansi_color_fg_%s" style="text-decoration: %s">',
-                $this->colorNames[$bg],
-                $this->colorNames[$fg],
-                $td
-            );
+            return sprintf('</span><span class="ansi_color_bg_%s ansi_color_fg_%s">', $this->colorNames[$bg], $this->colorNames[$fg]);
         }
     }
 
