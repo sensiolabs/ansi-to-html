@@ -48,6 +48,9 @@ class AnsiToHtmlConverterTest extends \PHPUnit_Framework_TestCase
 
             // carriage returns
             array("<span style=\"background-color: black; color: white\">foobar</span>", "foo\rbar\rfoobar"),
+
+            // underline
+            array("<span style=\"background-color: black; color: white; text-decoration: underline\">foo</span>", "\e[4mfoo\e[0m"),
         );
     }
 }
