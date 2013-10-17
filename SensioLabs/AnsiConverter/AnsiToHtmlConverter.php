@@ -72,9 +72,16 @@ class AnsiToHtmlConverter
         }
 
         if ($this->inlineStyles) {
-            $html = sprintf('<span style="background-color: %s; color: %s">%s</span>', $this->inlineColors['black'], $this->inlineColors['white'], $html);
+            $html = sprintf(
+                '<span style="background-color: %s; color: %s; text-decoration: none">%s</span>',
+                $this->inlineColors['black'], $this->inlineColors['white'],
+                $html
+            );
         } else {
-            $html = sprintf('<span class="ansi_color_fg_black ansi_color_bg_white">%s</span>', $html);
+            $html = sprintf(
+                '<span class="ansi_color_fg_black ansi_color_bg_white" style="text-decoration: none">%s</span>',
+                $html
+            );
         }
 
         // remove empty span
@@ -87,7 +94,7 @@ class AnsiToHtmlConverter
     {
         $bg = 0;
         $fg = 7;
-        $as = '';
+        $td = 'none';
         if ('0' != $ansi && '' != $ansi) {
             $options = explode(';', $ansi);
 
@@ -110,7 +117,7 @@ class AnsiToHtmlConverter
             }
 
             if (in_array(4, $options)) {
-                $as = 'text-decoration: underline;';
+                $td = 'underline';
             }
 
             if (in_array(7, $options)) {
@@ -119,14 +126,18 @@ class AnsiToHtmlConverter
         }
 
         if ($this->inlineStyles) {
-            return sprintf('</span><span style="background-color: %s; color: %s'.($as ? '; '.$as : '').'">',
+            return sprintf(
+                '</span><span style="background-color: %s; color: %s; text-decoration: %s">',
                 $this->inlineColors[$this->colorNames[$bg]],
-                $this->inlineColors[$this->colorNames[$fg]]
+                $this->inlineColors[$this->colorNames[$fg]],
+                $td
             );
         } else {
-            return sprintf('</span><span class="ansi_color_bg_%s ansi_color_fg_%s"'.($as ? ' style="'.$as.'"' : '').'>',
+            return sprintf(
+                '</span><span class="ansi_color_bg_%s ansi_color_fg_%s" style="text-decoration: %s">',
                 $this->colorNames[$bg],
-                $this->colorNames[$fg]
+                $this->colorNames[$fg],
+                $td
             );
         }
     }
