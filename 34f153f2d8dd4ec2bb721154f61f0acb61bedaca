@@ -1,0 +1,17 @@
+---------------------------------------------------------------------------
+
+by adam187 at 2013-10-17T16:28:58Z
+
+@fabpot something like this?
+
+---------------------------------------------------------------------------
+
+by fabpot at 2013-10-17T20:50:59Z
+
+Can you revert the blank line changes and put everything back on one line as before? Also, I'd prefer to not add `text-decoration: none` when not strictly needed.
+
+---------------------------------------------------------------------------
+
+by adam187 at 2013-10-17T21:10:03Z
+
+Sure
