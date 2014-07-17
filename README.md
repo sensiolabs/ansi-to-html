@@ -67,3 +67,43 @@ which you can then use in your HTML document:
     </body>
 </html>
 ```
+
+Twig Integration
+----------------
+
+Register the extension:
+
+```php
+use SensioLabs\AnsiConverter\Bridge\Twig\AnsiExtension;
+
+$twig->addExtension(AnsiExtension());
+```
+
+It's possible to use a custom ``AnsiToHtmlConverter``:
+
+```php
+use SensioLabs\AnsiConverter\Bridge\Twig\AnsiExtension;
+use SensioLabs\AnsiConverter\Theme\SolarizedTheme;
+
+$theme = new SolarizedTheme();
+$converter = new AnsiToHtmlConverter($theme, false);
+
+$twig->addExtension(AnsiExtension($converter));
+```
+
+Then:
+
+```jinja
+<html>
+    <head>
+        <style>
+            {# This is only need if the inline styling is disabled #}
+            {{ ansi_css }}
+        </style>
+    </head>
+    <body>
+        {{ some_ansi_code|ansi_to_html }}
+    </body>
+</html>
+```
+
