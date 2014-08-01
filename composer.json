@@ -12,6 +12,9 @@
     "require": {
         "php": ">=5.3.0"
     },
+    "suggest": {
+        "twig/twig": "Provides nice templating features"
+    },
     "autoload": {
         "psr-0": { "SensioLabs\\AnsiConverter": "." }
     },

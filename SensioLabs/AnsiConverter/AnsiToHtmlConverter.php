@@ -83,6 +83,11 @@ class AnsiToHtmlConverter
         return $html;
     }
 
+    public function getTheme()
+    {
+        return $this->theme;
+    }
+
     protected function convertAnsiToColor($ansi)
     {
         $bg = 0;
