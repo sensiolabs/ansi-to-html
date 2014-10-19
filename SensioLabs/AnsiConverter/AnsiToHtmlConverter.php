@@ -74,7 +74,7 @@ class AnsiToHtmlConverter
         if ($this->inlineStyles) {
             $html = sprintf('<span style="background-color: %s; color: %s">%s</span>', $this->inlineColors['black'], $this->inlineColors['white'], $html);
         } else {
-            $html = sprintf('<span class="ansi_color_fg_black ansi_color_bg_white">%s</span>', $html);
+            $html = sprintf('<span class="ansi_color_bg_black ansi_color_fg_white">%s</span>', $html);
         }
 
         // remove empty span
