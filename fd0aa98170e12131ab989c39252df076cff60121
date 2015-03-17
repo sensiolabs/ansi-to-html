@@ -1,0 +1,11 @@
+---------------------------------------------------------------------------
+
+by cordoval at 2014-07-15T13:00:12Z
+
+@fabpot is there a need for the https://github.com/sensiolabs/ansi-to-html/blob/master/SensioLabs/AnsiConverter/AnsiToHtmlConverter.php#L35 double spacing here? I know the looping over the tokens depends on perhaps this order, but just asking to be clear, else i can also at this time remove them.
+
+---------------------------------------------------------------------------
+
+by cordoval at 2015-03-17T03:56:10Z
+
+@fabpot @lyrixx done, sorry it took me a while to get back to this
