@@ -5,7 +5,7 @@ This small library only does one thing: converting a text containing ANSI
 codes to an HTML5 fragment:
 
 ```php
-require_once __DIR__.'/../vendor/autoload.php';
+require_once __DIR__.'/vendor/autoload.php';
 
 use SensioLabs\AnsiConverter\AnsiToHtmlConverter;
 
@@ -44,7 +44,7 @@ by turning off style inlining:
 $converter = new AnsiToHtmlConverter($theme, false);
 ```
 
-And the `asCss()` method of the theme object let you retrieve the theme styles
+And the `asCss()` method of the theme object lets you retrieve the theme styles
 as a CSS snippet:
 
 ```php

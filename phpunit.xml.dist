@@ -15,5 +15,5 @@
         <testsuite name="Test Suite">
             <directory>./SensioLabs/AnsiConverter/Tests</directory>
         </testsuite>
-  </testsuites>
+    </testsuites>
 </phpunit>
