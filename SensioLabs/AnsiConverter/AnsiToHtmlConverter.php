@@ -41,7 +41,7 @@ class AnsiToHtmlConverter
     {
         // remove cursor movement sequences
         $text = preg_replace('#\e\[(K|s|u|2J|2K|\d+(A|B|C|D|E|F|G|J|K|S|T)|\d+;\d+(H|f))#', '', $text);
-        $text = htmlspecialchars($text, ENT_QUOTES, $this->charset);
+        $text = htmlspecialchars($text, ENT_QUOTES | ENT_SUBSTITUTE, $this->charset);
 
         // carriage return
         $text = preg_replace('#^.*\r(?!\n)#m', '', $text);

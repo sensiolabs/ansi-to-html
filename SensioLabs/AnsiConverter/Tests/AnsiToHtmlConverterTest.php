@@ -51,6 +51,10 @@ class AnsiToHtmlConverterTest extends \PHPUnit_Framework_TestCase
 
             // underline
             array("<span style=\"background-color: black; color: white; text-decoration: underline\">foo</span>", "\e[4mfoo\e[0m"),
+
+            //non valid unicode codepoints substitution
+            array('<span style="background-color: black; color: white">foo '."\xEF\xBF\xBD".'</span>', "foo \xF4\xFF\xFF\xFF"),
+
         );
     }
 }
