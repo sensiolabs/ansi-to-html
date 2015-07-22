@@ -22,24 +22,24 @@ class SolarizedTheme extends Theme
     {
         return array(
             // normal
-            'black'   => '#073642',
-            'red'     => '#dc322f',
-            'green'   => '#859900',
-            'yellow'  => '#b58900',
-            'blue'    => '#268bd2',
+            'black' => '#073642',
+            'red' => '#dc322f',
+            'green' => '#859900',
+            'yellow' => '#b58900',
+            'blue' => '#268bd2',
             'magenta' => '#d33682',
-            'cyan'    => '#2aa198',
-            'white'   => '#eee8d5',
+            'cyan' => '#2aa198',
+            'white' => '#eee8d5',
 
             // bright
-            'brblack'   => '#002b36',
-            'brred'     => '#cb4b16',
-            'brgreen'   => '#586e75',
-            'bryellow'  => '#657b83',
-            'brblue'    => '#839496',
+            'brblack' => '#002b36',
+            'brred' => '#cb4b16',
+            'brgreen' => '#586e75',
+            'bryellow' => '#657b83',
+            'brblue' => '#839496',
             'brmagenta' => '#6c71c4',
-            'brcyan'    => '#93a1a1',
-            'brwhite'   => '#fdf6e3',
+            'brcyan' => '#93a1a1',
+            'brwhite' => '#fdf6e3',
         );
     }
 }

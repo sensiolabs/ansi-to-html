@@ -30,23 +30,23 @@ class Theme
     public function asArray()
     {
         return array(
-            'black'   => 'black',
-            'red'     => 'darkred',
-            'green'   => 'green',
-            'yellow'  => 'yellow',
-            'blue'    => 'blue',
+            'black' => 'black',
+            'red' => 'darkred',
+            'green' => 'green',
+            'yellow' => 'yellow',
+            'blue' => 'blue',
             'magenta' => 'darkmagenta',
-            'cyan'    => 'cyan',
-            'white'   => 'white',
+            'cyan' => 'cyan',
+            'white' => 'white',
 
-            'brblack'   => 'black',
-            'brred'     => 'red',
-            'brgreen'   => 'lightgreen',
-            'bryellow'  => 'lightyellow',
-            'brblue'    => 'lightblue',
+            'brblack' => 'black',
+            'brred' => 'red',
+            'brgreen' => 'lightgreen',
+            'bryellow' => 'lightyellow',
+            'brblue' => 'lightblue',
             'brmagenta' => 'magenta',
-            'brcyan'    => 'lightcyan',
-            'brwhite'   => 'white',
+            'brcyan' => 'lightcyan',
+            'brwhite' => 'white',
         );
     }
 }
