@@ -1,0 +1,6 @@
+---------------------------------------------------------------------------
+
+by derpue at 2015-07-21T08:03:52Z
+
+Added some PHP Version conditionals.
+Fixing the somewhat bugged behavior of htmlspecialchars for PHP>=5.4 with fallback to bugged behavior under PHP 5.3
