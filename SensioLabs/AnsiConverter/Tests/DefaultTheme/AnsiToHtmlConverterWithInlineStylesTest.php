@@ -9,11 +9,11 @@
  * file that was distributed with this source code.
  */
 
-namespace SensioLabs\AnsiConverter\Tests;
+namespace SensioLabs\AnsiConverter\Tests\DefaultTheme;
 
 use SensioLabs\AnsiConverter\AnsiToHtmlConverter;
 
-class AnsiToHtmlConverterTest extends \PHPUnit_Framework_TestCase
+class AnsiToHtmlConverterWithInlineStylesTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * @dataProvider getConvertData

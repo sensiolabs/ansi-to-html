@@ -16,13 +16,24 @@ namespace SensioLabs\AnsiConverter\Theme;
  */
 class Theme
 {
-    public function asCss($prefix = 'ansi_color')
+    /**
+     * @var string
+     */
+    protected $prefix;
+
+    public function __construct($prefix = null)
+    {
+        $this->prefix = $prefix;
+    }
+
+    public function asCss()
     {
         $css = array();
         foreach ($this->asArray() as $name => $color) {
-            $css[] = sprintf('.%s_fg_%s { color: %s }', $prefix, $name, $color);
-            $css[] = sprintf('.%s_bg_%s { background-color: %s }', $prefix, $name, $color);
+            $css[] = sprintf('.%s_fg_%s { color: %s }', $this->prefix, $name, $color);
+            $css[] = sprintf('.%s_bg_%s { background-color: %s }', $this->prefix, $name, $color);
         }
+        $css[] = sprintf('.%s_underlined { text-decoration: underlined }', $this->prefix);
 
         return implode("\n", $css);
     }
@@ -48,5 +59,21 @@ class Theme
             'brcyan' => 'lightcyan',
             'brwhite' => 'white',
         );
+    }
+
+    /**
+     * @return string
+     */
+    public function getPrefix()
+    {
+        return $this->prefix;
+    }
+
+    /**
+     * @param string $prefix
+     */
+    public function setPrefix($prefix)
+    {
+        $this->prefix = $prefix;
     }
 }
