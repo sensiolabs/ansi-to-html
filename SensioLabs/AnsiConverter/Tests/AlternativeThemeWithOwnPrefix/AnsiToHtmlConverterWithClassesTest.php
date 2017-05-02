@@ -92,6 +92,12 @@ END_CSS;
 
             // non valid unicode codepoints substitution (only available with PHP >= 5.4)
             PHP_VERSION_ID < 50400 ?: array('<span class="solarized_bg_black solarized_fg_white">foo '."\xEF\xBF\xBD".'</span>', $css, "foo \xF4\xFF\xFF\xFF"),
+
+            // Yellow on green.
+            array('<span class="solarized_bg_green solarized_fg_yellow">foo</span>', $css, "\e[33;42mfoo\e[0m"),
+
+            // Yellow on green - reversed.
+            array('<span class="solarized_bg_yellow solarized_fg_green">foo</span>', $css, "\e[33;42;7mfoo\e[0m"),
         );
     }
 }

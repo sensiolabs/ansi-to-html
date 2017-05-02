@@ -12,7 +12,7 @@
 namespace SensioLabs\AnsiConverter\Tests\AlternativeTheme;
 
 use SensioLabs\AnsiConverter\AnsiToHtmlConverter;
-use SensioLabs\AnsiConverter\Theme\SolarizedXTermTheme;
+use SensioLabs\AnsiConverter\Theme\SolarizedTheme;
 
 class AnsiToHtmlConverterWithClassesTest extends \PHPUnit_Framework_TestCase
 {
@@ -21,7 +21,7 @@ class AnsiToHtmlConverterWithClassesTest extends \PHPUnit_Framework_TestCase
      */
     public function testConvert($expectedOutput, $expectedCss, $input)
     {
-        $converter = new AnsiToHtmlConverter(new SolarizedXTermTheme(), false);
+        $converter = new AnsiToHtmlConverter(new SolarizedTheme(), false);
         $this->assertEquals($expectedOutput, $converter->convert($input));
         $this->assertEquals($expectedCss, $converter->getTheme()->asCss());
     }
@@ -29,38 +29,38 @@ class AnsiToHtmlConverterWithClassesTest extends \PHPUnit_Framework_TestCase
     public function getConvertData()
     {
         $css = <<< 'END_CSS'
-.ansi_color_fg_black { color: #262626 }
-.ansi_color_bg_black { background-color: #262626 }
-.ansi_color_fg_red { color: #d70000 }
-.ansi_color_bg_red { background-color: #d70000 }
-.ansi_color_fg_green { color: #5f8700 }
-.ansi_color_bg_green { background-color: #5f8700 }
-.ansi_color_fg_yellow { color: #af8700 }
-.ansi_color_bg_yellow { background-color: #af8700 }
-.ansi_color_fg_blue { color: #0087ff }
-.ansi_color_bg_blue { background-color: #0087ff }
-.ansi_color_fg_magenta { color: #af005f }
-.ansi_color_bg_magenta { background-color: #af005f }
-.ansi_color_fg_cyan { color: #00afaf }
-.ansi_color_bg_cyan { background-color: #00afaf }
-.ansi_color_fg_white { color: #e4e4e4 }
-.ansi_color_bg_white { background-color: #e4e4e4 }
-.ansi_color_fg_brblack { color: #1c1c1c }
-.ansi_color_bg_brblack { background-color: #1c1c1c }
-.ansi_color_fg_brred { color: #d75f00 }
-.ansi_color_bg_brred { background-color: #d75f00 }
-.ansi_color_fg_brgreen { color: #585858 }
-.ansi_color_bg_brgreen { background-color: #585858 }
-.ansi_color_fg_bryellow { color: #626262 }
-.ansi_color_bg_bryellow { background-color: #626262 }
-.ansi_color_fg_brblue { color: #808080 }
-.ansi_color_bg_brblue { background-color: #808080 }
-.ansi_color_fg_brmagenta { color: #5f5faf }
-.ansi_color_bg_brmagenta { background-color: #5f5faf }
-.ansi_color_fg_brcyan { color: #8a8a8a }
-.ansi_color_bg_brcyan { background-color: #8a8a8a }
-.ansi_color_fg_brwhite { color: #ffffd7 }
-.ansi_color_bg_brwhite { background-color: #ffffd7 }
+.ansi_color_fg_black { color: #073642 }
+.ansi_color_bg_black { background-color: #073642 }
+.ansi_color_fg_red { color: #dc322f }
+.ansi_color_bg_red { background-color: #dc322f }
+.ansi_color_fg_green { color: #859900 }
+.ansi_color_bg_green { background-color: #859900 }
+.ansi_color_fg_yellow { color: #b58900 }
+.ansi_color_bg_yellow { background-color: #b58900 }
+.ansi_color_fg_blue { color: #268bd2 }
+.ansi_color_bg_blue { background-color: #268bd2 }
+.ansi_color_fg_magenta { color: #d33682 }
+.ansi_color_bg_magenta { background-color: #d33682 }
+.ansi_color_fg_cyan { color: #2aa198 }
+.ansi_color_bg_cyan { background-color: #2aa198 }
+.ansi_color_fg_white { color: #eee8d5 }
+.ansi_color_bg_white { background-color: #eee8d5 }
+.ansi_color_fg_brblack { color: #002b36 }
+.ansi_color_bg_brblack { background-color: #002b36 }
+.ansi_color_fg_brred { color: #cb4b16 }
+.ansi_color_bg_brred { background-color: #cb4b16 }
+.ansi_color_fg_brgreen { color: #586e75 }
+.ansi_color_bg_brgreen { background-color: #586e75 }
+.ansi_color_fg_bryellow { color: #657b83 }
+.ansi_color_bg_bryellow { background-color: #657b83 }
+.ansi_color_fg_brblue { color: #839496 }
+.ansi_color_bg_brblue { background-color: #839496 }
+.ansi_color_fg_brmagenta { color: #6c71c4 }
+.ansi_color_bg_brmagenta { background-color: #6c71c4 }
+.ansi_color_fg_brcyan { color: #93a1a1 }
+.ansi_color_bg_brcyan { background-color: #93a1a1 }
+.ansi_color_fg_brwhite { color: #fdf6e3 }
+.ansi_color_bg_brwhite { background-color: #fdf6e3 }
 .ansi_color_underlined { text-decoration: underlined }
 END_CSS;
 
@@ -92,6 +92,12 @@ END_CSS;
 
             // non valid unicode codepoints substitution (only available with PHP >= 5.4)
             PHP_VERSION_ID < 50400 ?: array('<span class="ansi_color_bg_black ansi_color_fg_white">foo '."\xEF\xBF\xBD".'</span>', $css, "foo \xF4\xFF\xFF\xFF"),
+
+            // Yellow on green.
+            array('<span class="ansi_color_bg_green ansi_color_fg_yellow">foo</span>', $css, "\e[33;42mfoo\e[0m"),
+
+            // Yellow on green - reversed.
+            array('<span class="ansi_color_bg_yellow ansi_color_fg_green">foo</span>', $css, "\e[33;42;7mfoo\e[0m"),
         );
     }
 }

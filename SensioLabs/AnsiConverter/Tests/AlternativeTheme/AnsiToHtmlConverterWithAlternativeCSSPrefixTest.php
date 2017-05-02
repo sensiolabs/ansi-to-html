@@ -12,7 +12,7 @@
 namespace SensioLabs\AnsiConverter\Tests\AlternativeTheme;
 
 use SensioLabs\AnsiConverter\AnsiToHtmlConverter;
-use SensioLabs\AnsiConverter\Theme\SolarizedXTermTheme;
+use SensioLabs\AnsiConverter\Theme\SolarizedTheme;
 
 class AnsiToHtmlConverterWithAlternativeCSSPrefixTest extends \PHPUnit_Framework_TestCase
 {
@@ -21,7 +21,7 @@ class AnsiToHtmlConverterWithAlternativeCSSPrefixTest extends \PHPUnit_Framework
      */
     public function testConvert($expectedOutput, $expectedCss, $input)
     {
-        $converter = new AnsiToHtmlConverter(new SolarizedXTermTheme(), false, 'UTF-8', 'alternative_prefix');
+        $converter = new AnsiToHtmlConverter(new SolarizedTheme(), false, 'UTF-8', 'alternative_prefix');
         $this->assertEquals($expectedOutput, $converter->convert($input));
         $this->assertEquals($expectedCss, $converter->getTheme()->asCss());
     }
@@ -29,38 +29,38 @@ class AnsiToHtmlConverterWithAlternativeCSSPrefixTest extends \PHPUnit_Framework
     public function getConvertData()
     {
         $css = <<< 'END_CSS'
-.alternative_prefix_fg_black { color: #262626 }
-.alternative_prefix_bg_black { background-color: #262626 }
-.alternative_prefix_fg_red { color: #d70000 }
-.alternative_prefix_bg_red { background-color: #d70000 }
-.alternative_prefix_fg_green { color: #5f8700 }
-.alternative_prefix_bg_green { background-color: #5f8700 }
-.alternative_prefix_fg_yellow { color: #af8700 }
-.alternative_prefix_bg_yellow { background-color: #af8700 }
-.alternative_prefix_fg_blue { color: #0087ff }
-.alternative_prefix_bg_blue { background-color: #0087ff }
-.alternative_prefix_fg_magenta { color: #af005f }
-.alternative_prefix_bg_magenta { background-color: #af005f }
-.alternative_prefix_fg_cyan { color: #00afaf }
-.alternative_prefix_bg_cyan { background-color: #00afaf }
-.alternative_prefix_fg_white { color: #e4e4e4 }
-.alternative_prefix_bg_white { background-color: #e4e4e4 }
-.alternative_prefix_fg_brblack { color: #1c1c1c }
-.alternative_prefix_bg_brblack { background-color: #1c1c1c }
-.alternative_prefix_fg_brred { color: #d75f00 }
-.alternative_prefix_bg_brred { background-color: #d75f00 }
-.alternative_prefix_fg_brgreen { color: #585858 }
-.alternative_prefix_bg_brgreen { background-color: #585858 }
-.alternative_prefix_fg_bryellow { color: #626262 }
-.alternative_prefix_bg_bryellow { background-color: #626262 }
-.alternative_prefix_fg_brblue { color: #808080 }
-.alternative_prefix_bg_brblue { background-color: #808080 }
-.alternative_prefix_fg_brmagenta { color: #5f5faf }
-.alternative_prefix_bg_brmagenta { background-color: #5f5faf }
-.alternative_prefix_fg_brcyan { color: #8a8a8a }
-.alternative_prefix_bg_brcyan { background-color: #8a8a8a }
-.alternative_prefix_fg_brwhite { color: #ffffd7 }
-.alternative_prefix_bg_brwhite { background-color: #ffffd7 }
+.alternative_prefix_fg_black { color: #073642 }
+.alternative_prefix_bg_black { background-color: #073642 }
+.alternative_prefix_fg_red { color: #dc322f }
+.alternative_prefix_bg_red { background-color: #dc322f }
+.alternative_prefix_fg_green { color: #859900 }
+.alternative_prefix_bg_green { background-color: #859900 }
+.alternative_prefix_fg_yellow { color: #b58900 }
+.alternative_prefix_bg_yellow { background-color: #b58900 }
+.alternative_prefix_fg_blue { color: #268bd2 }
+.alternative_prefix_bg_blue { background-color: #268bd2 }
+.alternative_prefix_fg_magenta { color: #d33682 }
+.alternative_prefix_bg_magenta { background-color: #d33682 }
+.alternative_prefix_fg_cyan { color: #2aa198 }
+.alternative_prefix_bg_cyan { background-color: #2aa198 }
+.alternative_prefix_fg_white { color: #eee8d5 }
+.alternative_prefix_bg_white { background-color: #eee8d5 }
+.alternative_prefix_fg_brblack { color: #002b36 }
+.alternative_prefix_bg_brblack { background-color: #002b36 }
+.alternative_prefix_fg_brred { color: #cb4b16 }
+.alternative_prefix_bg_brred { background-color: #cb4b16 }
+.alternative_prefix_fg_brgreen { color: #586e75 }
+.alternative_prefix_bg_brgreen { background-color: #586e75 }
+.alternative_prefix_fg_bryellow { color: #657b83 }
+.alternative_prefix_bg_bryellow { background-color: #657b83 }
+.alternative_prefix_fg_brblue { color: #839496 }
+.alternative_prefix_bg_brblue { background-color: #839496 }
+.alternative_prefix_fg_brmagenta { color: #6c71c4 }
+.alternative_prefix_bg_brmagenta { background-color: #6c71c4 }
+.alternative_prefix_fg_brcyan { color: #93a1a1 }
+.alternative_prefix_bg_brcyan { background-color: #93a1a1 }
+.alternative_prefix_fg_brwhite { color: #fdf6e3 }
+.alternative_prefix_bg_brwhite { background-color: #fdf6e3 }
 .alternative_prefix_underlined { text-decoration: underlined }
 END_CSS;
 
@@ -92,6 +92,12 @@ END_CSS;
 
             // non valid unicode codepoints substitution (only available with PHP >= 5.4)
             PHP_VERSION_ID < 50400 ?: array('<span class="alternative_prefix_bg_black alternative_prefix_fg_white">foo '."\xEF\xBF\xBD".'</span>', $css, "foo \xF4\xFF\xFF\xFF"),
+
+            // Yellow on green.
+            array('<span class="alternative_prefix_bg_green alternative_prefix_fg_yellow">foo</span>', $css, "\e[33;42mfoo\e[0m"),
+
+            // Yellow on green - reversed.
+            array('<span class="alternative_prefix_bg_yellow alternative_prefix_fg_green">foo</span>', $css, "\e[33;42;7mfoo\e[0m"),
         );
     }
 }
