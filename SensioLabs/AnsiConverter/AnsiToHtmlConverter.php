@@ -27,13 +27,16 @@ class AnsiToHtmlConverter
 
     public function __construct(Theme $theme = null, $inlineStyles = true, $charset = 'UTF-8', $cssPrefix = 'ansi_color')
     {
-        if (is_null($theme)) {
+        if (null === $theme) {
+            // If no theme supplied create one and use the default css prefix.
             $this->theme = new Theme($cssPrefix);
             $this->cssPrefix = $cssPrefix;
         } else {
+            // Use the supplied theme and the themes prefix if it is defined.
             $this->theme = $theme;
             $this->cssPrefix = $theme->getPrefix();
-            if (is_null($this->cssPrefix)) {
+            if (null === $this->cssPrefix) {
+                // Set the prefix on the theme and use the prefix locally.
                 $this->theme->setPrefix($cssPrefix);
                 $this->cssPrefix = $cssPrefix;
             }
