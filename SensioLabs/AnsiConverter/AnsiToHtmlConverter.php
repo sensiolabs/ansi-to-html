@@ -138,7 +138,7 @@ class AnsiToHtmlConverter
     protected function tokenize($text)
     {
         $tokens = array();
-        preg_match_all("/(?:\e\[(.*?)m|(\x08))/", $text, $matches, PREG_OFFSET_CAPTURE);
+        preg_match_all('/(?:\\\e\\[(.*?)m|(\\x08))/', $text, $matches, PREG_OFFSET_CAPTURE);
 
         $offset = 0;
         foreach ($matches[0] as $i => $match) {
