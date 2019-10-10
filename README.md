@@ -68,6 +68,8 @@ which you can then use in your HTML document:
 </html>
 ```
 
+You can also override the theme by calling the `setTheme()` method with a new theme.
+
 Twig Integration
 ----------------
 

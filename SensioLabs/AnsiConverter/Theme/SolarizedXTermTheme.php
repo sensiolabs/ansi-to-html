@@ -1,6 +1,6 @@
 <?php
 
-/*
+/**
  * This file is part of ansi-to-html.
  *
  * (c) 2013 Fabien Potencier
@@ -20,7 +20,7 @@ class SolarizedXTermTheme extends Theme
 {
     public function asArray()
     {
-        return array(
+        return [
             // normal
             'black' => '#262626',
             'red' => '#d70000',
@@ -40,6 +40,6 @@ class SolarizedXTermTheme extends Theme
             'brmagenta' => '#5f5faf',
             'brcyan' => '#8a8a8a',
             'brwhite' => '#ffffd7',
-        );
+        ];
     }
 }
