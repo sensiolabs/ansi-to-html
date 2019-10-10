@@ -1,6 +1,6 @@
 <?php
 
-/*
+/**
  * This file is part of ansi-to-html.
  *
  * (c) 2013 Fabien Potencier
@@ -18,18 +18,18 @@ class Theme
 {
     public function asCss($prefix = 'ansi_color')
     {
-        $css = array();
+        $css = [];
         foreach ($this->asArray() as $name => $color) {
-            $css[] = sprintf('.%s_fg_%s { color: %s }', $prefix, $name, $color);
-            $css[] = sprintf('.%s_bg_%s { background-color: %s }', $prefix, $name, $color);
+            $css[] = \sprintf('.%s_fg_%s { color: %s }', $prefix, $name, $color);
+            $css[] = \sprintf('.%s_bg_%s { background-color: %s }', $prefix, $name, $color);
         }
 
-        return implode("\n", $css);
+        return \implode("\n", $css);
     }
 
     public function asArray()
     {
-        return array(
+        return [
             'black' => 'black',
             'red' => 'darkred',
             'green' => 'green',
@@ -47,6 +47,6 @@ class Theme
             'brmagenta' => 'magenta',
             'brcyan' => 'lightcyan',
             'brwhite' => 'white',
-        );
+        ];
     }
 }

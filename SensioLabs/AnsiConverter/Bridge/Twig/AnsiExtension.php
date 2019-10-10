@@ -1,10 +1,22 @@
 <?php
 
+/**
+ * This file is part of ansi-to-html.
+ *
+ * (c) 2013 Fabien Potencier
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
 namespace SensioLabs\AnsiConverter\Bridge\Twig;
 
 use SensioLabs\AnsiConverter\AnsiToHtmlConverter;
+use Twig\Extension\AbstractExtension;
+use Twig\TwigFilter;
+use Twig\TwigFunction;
 
-class AnsiExtension extends \Twig_Extension
+class AnsiExtension extends AbstractExtension
 {
     private $converter;
 
@@ -15,16 +27,16 @@ class AnsiExtension extends \Twig_Extension
 
     public function getFilters()
     {
-        return array(
-            new \Twig_SimpleFilter('ansi_to_html', array($this, 'ansiToHtml'), array('is_safe' => array('html'))),
-        );
+        return [
+            new TwigFilter('ansi_to_html', [$this, 'ansiToHtml'], ['is_safe' => ['html']]),
+        ];
     }
 
     public function getFunctions()
     {
-        return array(
-            new \Twig_SimpleFunction('ansi_css', array($this, 'css'), array('is_safe' => array('css'))),
-        );
+        return [
+            new TwigFunction('ansi_css', [$this, 'css'], ['is_safe' => ['css']]),
+        ];
     }
 
     public function ansiToHtml($string)

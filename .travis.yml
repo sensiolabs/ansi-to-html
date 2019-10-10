@@ -1,0 +1,44 @@
+sudo: false
+
+language: php
+
+php:
+  - 7.0
+  - 7.1
+  - 7.2
+  - 7.3
+  - hhvm
+
+env:
+  - COMPOSER_FLAGS=--prefer-lowest
+
+matrix:
+  exclude:
+    - php: hhvm
+      env: COMPOSER_FLAGS=--prefer-lowest
+  include:
+    - php: hhvm
+      env: COMPOSER_FLAGS=
+    - php: 7
+      env: PHPSTAN=1
+  allow_failures:
+    - php: nightly
+    - php: hhvm
+
+cache:
+  directories:
+    - $HOME/.composer/cache
+    - $HOME/.php-cs-fixer
+
+before_script:
+    - travis_retry composer self-update
+    - travis_retry composer update --no-interaction --prefer-source --prefer-stable ${COMPOSER_FLAGS}
+
+script:
+    - vendor/bin/phpunit --coverage-text --coverage-clover=coverage.clover
+    - composer cs
+    - composer sa
+
+after_script:
+    - wget https://scrutinizer-ci.com/ocular.phar
+    - php ocular.phar code-coverage:upload --format=php-clover coverage.clover

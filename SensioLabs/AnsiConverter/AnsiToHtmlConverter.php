@@ -1,6 +1,6 @@
 <?php
 
-/*
+/**
  * This file is part of ansi-to-html.
  *
  * (c) 2013 Fabien Potencier
@@ -18,36 +18,45 @@ use SensioLabs\AnsiConverter\Theme\Theme;
  */
 class AnsiToHtmlConverter
 {
+    /** @var Theme */
     protected $theme;
+
+    /** @var string */
     protected $charset;
+
+    /** @var bool */
     protected $inlineStyles;
+
+    /** @var string[] */
     protected $inlineColors;
+
+    /** @var string[] */
     protected $colorNames;
 
     public function __construct(Theme $theme = null, $inlineStyles = true, $charset = 'UTF-8')
     {
-        $this->theme = null === $theme ? new Theme() : $theme;
-        $this->inlineStyles = $inlineStyles;
-        $this->charset = $charset;
-        $this->inlineColors = $this->theme->asArray();
-        $this->colorNames = array(
+        $this->setTheme($theme);
+        $this->setInlineStyles($inlineStyles);
+        $this->setCharset($charset);
+
+        $this->colorNames = [
             'black', 'red', 'green', 'yellow', 'blue', 'magenta', 'cyan', 'white',
             '', '',
             'brblack', 'brred', 'brgreen', 'bryellow', 'brblue', 'brmagenta', 'brcyan', 'brwhite',
-        );
+        ];
     }
 
     public function convert($text)
     {
         // remove cursor movement sequences
-        $text = preg_replace('#\e\[(K|s|u|2J|2K|\d+(A|B|C|D|E|F|G|J|K|S|T)|\d+;\d+(H|f))#', '', $text);
+        $text = \preg_replace('#\e\[(K|s|u|2J|2K|\d+(A|B|C|D|E|F|G|J|K|S|T)|\d+;\d+(H|f))#', '', $text);
         // remove character set sequences
-        $text = preg_replace('#\e(\(|\))(A|B|[0-2])#', '', $text);
+        $text = \preg_replace('#\e(\(|\))(A|B|[0-2])#', '', $text);
 
-        $text = htmlspecialchars($text, PHP_VERSION_ID >= 50400 ? ENT_QUOTES | ENT_SUBSTITUTE : ENT_QUOTES, $this->charset);
+        $text = \htmlspecialchars($text, \PHP_VERSION_ID >= 50400 ? ENT_QUOTES | ENT_SUBSTITUTE : ENT_QUOTES, $this->charset);
 
         // carriage return
-        $text = preg_replace('#^.*\r(?!\n)#m', '', $text);
+        $text = \preg_replace('#^.*\r(?!\n)#m', '', $text);
 
         $tokens = $this->tokenize($text);
 
@@ -56,8 +65,8 @@ class AnsiToHtmlConverter
             if ('backspace' == $token[0]) {
                 $j = $i;
                 while (--$j >= 0) {
-                    if ('text' == $tokens[$j][0] && strlen($tokens[$j][1]) > 0) {
-                        $tokens[$j][1] = substr($tokens[$j][1], 0, -1);
+                    if ('text' == $tokens[$j][0] && \strlen($tokens[$j][1]) > 0) {
+                        $tokens[$j][1] = \substr($tokens[$j][1], 0, -1);
 
                         break;
                     }
@@ -75,20 +84,35 @@ class AnsiToHtmlConverter
         }
 
         if ($this->inlineStyles) {
-            $html = sprintf('<span style="background-color: %s; color: %s">%s</span>', $this->inlineColors['black'], $this->inlineColors['white'], $html);
+            $html = \sprintf('<span style="background-color: %s; color: %s">%s</span>', $this->inlineColors['black'], $this->inlineColors['white'], $html);
         } else {
-            $html = sprintf('<span class="ansi_color_bg_black ansi_color_fg_white">%s</span>', $html);
+            $html = \sprintf('<span class="ansi_color_bg_black ansi_color_fg_white">%s</span>', $html);
         }
 
         // remove empty span
-        $html = preg_replace('#<span[^>]*></span>#', '', $html);
+        $html = \preg_replace('#<span[^>]*></span>#', '', $html);
 
         return $html;
     }
 
-    public function getTheme()
+    protected function tokenize($text)
     {
-        return $this->theme;
+        $tokens = [];
+        \preg_match_all('/(?:\e\[(.*?)m|(\x08))/', $text, $matches, PREG_OFFSET_CAPTURE);
+
+        $offset = 0;
+        foreach ($matches[0] as $i => $match) {
+            if ($match[1] - $offset > 0) {
+                $tokens[] = ['text', \substr($text, $offset, $match[1] - $offset)];
+            }
+            $tokens[] = ["\x08" == $match[0] ? 'backspace' : 'color', $matches[1][$i][0]];
+            $offset = $match[1] + \strlen($match[0]);
+        }
+        if ($offset < \strlen($text)) {
+            $tokens[] = ['text', \substr($text, $offset)];
+        }
+
+        return $tokens;
     }
 
     protected function convertAnsiToColor($ansi)
@@ -97,7 +121,7 @@ class AnsiToHtmlConverter
         $fg = 7;
         $as = '';
         if ('0' != $ansi && '' != $ansi) {
-            $options = explode(';', $ansi);
+            $options = \explode(';', $ansi);
 
             foreach ($options as $option) {
                 if ($option >= 30 && $option < 38) {
@@ -112,16 +136,16 @@ class AnsiToHtmlConverter
             }
 
             // options: bold => 1, underscore => 4, blink => 5, reverse => 7, conceal => 8
-            if (in_array(1, $options)) {
+            if (\in_array(1, $options)) {
                 $fg += 10;
                 $bg += 10;
             }
 
-            if (in_array(4, $options)) {
+            if (\in_array(4, $options)) {
                 $as = '; text-decoration: underline';
             }
 
-            if (in_array(7, $options)) {
+            if (\in_array(7, $options)) {
                 $tmp = $fg;
                 $fg = $bg;
                 $bg = $tmp;
@@ -129,29 +153,58 @@ class AnsiToHtmlConverter
         }
 
         if ($this->inlineStyles) {
-            return sprintf('</span><span style="background-color: %s; color: %s%s">', $this->inlineColors[$this->colorNames[$bg]], $this->inlineColors[$this->colorNames[$fg]], $as);
+            return \sprintf('</span><span style="background-color: %s; color: %s%s">', $this->inlineColors[$this->colorNames[$bg]], $this->inlineColors[$this->colorNames[$fg]], $as);
         } else {
-            return sprintf('</span><span class="ansi_color_bg_%s ansi_color_fg_%s">', $this->colorNames[$bg], $this->colorNames[$fg]);
+            return \sprintf('</span><span class="ansi_color_bg_%s ansi_color_fg_%s">', $this->colorNames[$bg], $this->colorNames[$fg]);
         }
     }
 
-    protected function tokenize($text)
+    /**
+     * @return Theme
+     */
+    public function getTheme()
     {
-        $tokens = array();
-        preg_match_all("/(?:\e\[(.*?)m|(\x08))/", $text, $matches, PREG_OFFSET_CAPTURE);
+        return $this->theme;
+    }
 
-        $offset = 0;
-        foreach ($matches[0] as $i => $match) {
-            if ($match[1] - $offset > 0) {
-                $tokens[] = array('text', substr($text, $offset, $match[1] - $offset));
-            }
-            $tokens[] = array("\x08" == $match[0] ? 'backspace' : 'color', $matches[1][$i][0]);
-            $offset = $match[1] + strlen($match[0]);
-        }
-        if ($offset < strlen($text)) {
-            $tokens[] = array('text', substr($text, $offset));
-        }
+    /**
+     * @param Theme|null $theme
+     */
+    public function setTheme(Theme $theme = null)
+    {
+        $this->theme = null === $theme ? new Theme() : $theme;
+        $this->inlineColors = $this->theme->asArray();
+    }
 
-        return $tokens;
+    /**
+     * @return bool
+     */
+    public function isInlineStyles()
+    {
+        return $this->inlineStyles;
+    }
+
+    /**
+     * @param bool $inlineStyles
+     */
+    public function setInlineStyles($inlineStyles)
+    {
+        $this->inlineStyles = $inlineStyles;
+    }
+
+    /**
+     * @return string
+     */
+    public function getCharset()
+    {
+        return $this->charset;
+    }
+
+    /**
+     * @param string $charset
+     */
+    public function setCharset($charset)
+    {
+        $this->charset = $charset;
     }
 }
