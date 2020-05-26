@@ -3,9 +3,13 @@
 namespace SensioLabs\AnsiConverter\Bridge\Twig;
 
 use SensioLabs\AnsiConverter\AnsiToHtmlConverter;
+use Twig\Extension\AbstractExtension;
+use Twig\TwigFilter;
+use Twig\TwigFunction;
 
-class AnsiExtension extends \Twig_Extension
+class AnsiExtension extends AbstractExtension
 {
+    /** @var AnsiToHtmlConverter */
     private $converter;
 
     public function __construct(AnsiToHtmlConverter $converter = null)
@@ -13,18 +17,18 @@ class AnsiExtension extends \Twig_Extension
         $this->converter = $converter ?: new AnsiToHtmlConverter();
     }
 
-    public function getFilters()
+    public function getFilters(): array
     {
-        return array(
-            new \Twig_SimpleFilter('ansi_to_html', array($this, 'ansiToHtml'), array('is_safe' => array('html'))),
-        );
+        return [
+            new TwigFilter('ansi_to_html', [$this, 'ansiToHtml'], ['is_safe' => ['html']]),
+        ];
     }
 
-    public function getFunctions()
+    public function getFunctions(): array
     {
-        return array(
-            new \Twig_SimpleFunction('ansi_css', array($this, 'css'), array('is_safe' => array('css'))),
-        );
+        return [
+            new TwigFunction('ansi_css', [$this, 'css'], ['is_safe' => ['css']]),
+        ];
     }
 
     public function ansiToHtml($string)
@@ -32,12 +36,12 @@ class AnsiExtension extends \Twig_Extension
         return $this->converter->convert($string);
     }
 
-    public function css()
+    public function css(): string
     {
         return $this->converter->getTheme()->asCss();
     }
 
-    public function getName()
+    public function getName(): string
     {
         return 'sensiolabs_ansi';
     }
