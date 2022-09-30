@@ -88,7 +88,7 @@ use SensioLabs\AnsiConverter\Theme\SolarizedTheme;
 $theme = new SolarizedTheme();
 $converter = new AnsiToHtmlConverter($theme, false);
 
-$twig->addExtension(AnsiExtension($converter));
+$twig->addExtension(new AnsiExtension($converter));
 ```
 
 Then:
