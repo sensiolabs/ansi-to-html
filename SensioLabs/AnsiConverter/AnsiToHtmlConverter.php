@@ -47,6 +47,7 @@ class AnsiToHtmlConverter
         $text = htmlspecialchars($text, PHP_VERSION_ID >= 50400 ? ENT_QUOTES | ENT_SUBSTITUTE : ENT_QUOTES, $this->charset);
 
         // carriage return
+        $text = preg_replace('#\r+#m', "\r", $text);
         $text = preg_replace('#^.*\r(?!\n)#m', '', $text);
 
         $tokens = $this->tokenize($text);
