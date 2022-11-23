@@ -23,10 +23,24 @@ class AnsiToHtmlConverter
     protected $inlineStyles;
     protected $inlineColors;
     protected $colorNames;
+    protected $cssPrefix;
 
-    public function __construct(Theme $theme = null, $inlineStyles = true, $charset = 'UTF-8')
+    public function __construct(Theme $theme = null, $inlineStyles = true, $charset = 'UTF-8', $cssPrefix = 'ansi_color')
     {
-        $this->theme = null === $theme ? new Theme() : $theme;
+        if (null === $theme) {
+            // If no theme supplied create one and use the default css prefix.
+            $this->theme = new Theme($cssPrefix);
+            $this->cssPrefix = $cssPrefix;
+        } else {
+            // Use the supplied theme and the themes prefix if it is defined.
+            $this->theme = $theme;
+            $this->cssPrefix = $theme->getPrefix();
+            if (null === $this->cssPrefix) {
+                // Set the prefix on the theme and use the prefix locally.
+                $this->theme->setPrefix($cssPrefix);
+                $this->cssPrefix = $cssPrefix;
+            }
+        }
         $this->inlineStyles = $inlineStyles;
         $this->charset = $charset;
         $this->inlineColors = $this->theme->asArray();
@@ -77,7 +91,7 @@ class AnsiToHtmlConverter
         if ($this->inlineStyles) {
             $html = sprintf('<span style="background-color: %s; color: %s">%s</span>', $this->inlineColors['black'], $this->inlineColors['white'], $html);
         } else {
-            $html = sprintf('<span class="ansi_color_bg_black ansi_color_fg_white">%s</span>', $html);
+            $html = sprintf('<span class="%1$s_bg_black %1$s_fg_white">%2$s</span>', $this->cssPrefix, $html);
         }
 
         // remove empty span
@@ -129,9 +143,20 @@ class AnsiToHtmlConverter
         }
 
         if ($this->inlineStyles) {
-            return sprintf('</span><span style="background-color: %s; color: %s%s">', $this->inlineColors[$this->colorNames[$bg]], $this->inlineColors[$this->colorNames[$fg]], $as);
+            return sprintf(
+                '</span><span style="background-color: %s; color: %s%s">',
+                $this->inlineColors[$this->colorNames[$bg]],
+                $this->inlineColors[$this->colorNames[$fg]],
+                $as
+            );
         } else {
-            return sprintf('</span><span class="ansi_color_bg_%s ansi_color_fg_%s">', $this->colorNames[$bg], $this->colorNames[$fg]);
+            return sprintf(
+                '</span><span class="%1$s_bg_%2$s %1$s_fg_%3$s%4$s">',
+                $this->cssPrefix,
+                $this->colorNames[$bg],
+                $this->colorNames[$fg],
+                ($as ? sprintf(' %1$s_underlined', $this->cssPrefix) : '')
+            );
         }
     }
 
