@@ -23,10 +23,5 @@
     },
     "autoload": {
         "psr-4": { "SensioLabs\\AnsiConverter\\": "SensioLabs/AnsiConverter" }
-    },
-    "extra": {
-        "branch-alias": {
-            "dev-master": "1.2-dev"
-        }
     }
 }
