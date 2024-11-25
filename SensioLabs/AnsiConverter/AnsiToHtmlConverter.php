@@ -24,7 +24,7 @@ class AnsiToHtmlConverter
     protected $inlineColors;
     protected $colorNames;
 
-    public function __construct(Theme $theme = null, $inlineStyles = true, $charset = 'UTF-8')
+    public function __construct(?Theme $theme = null, $inlineStyles = true, $charset = 'UTF-8')
     {
         $this->theme = null === $theme ? new Theme() : $theme;
         $this->inlineStyles = $inlineStyles;
