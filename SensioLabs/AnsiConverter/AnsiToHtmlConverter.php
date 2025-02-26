@@ -96,6 +96,7 @@ class AnsiToHtmlConverter
         $bg = 0;
         $fg = 7;
         $as = '';
+        $hi = false;
         if ('0' != $ansi && '' != $ansi) {
             $options = explode(';', $ansi);
 
@@ -104,6 +105,11 @@ class AnsiToHtmlConverter
                     $fg = $option - 30;
                 } elseif ($option >= 40 && $option < 48) {
                     $bg = $option - 40;
+                } elseif ($option >= 90 && $option < 98) {
+                    $fg = $option - 90;
+                    $hi = true;
+                } elseif ($option >= 100 && $option < 108) {
+                    $bg = $option - 90;
                 } elseif (39 == $option) {
                     $fg = 7;
                 } elseif (49 == $option) {
@@ -112,7 +118,7 @@ class AnsiToHtmlConverter
             }
 
             // options: bold => 1, underscore => 4, blink => 5, reverse => 7, conceal => 8
-            if (in_array(1, $options)) {
+            if (in_array(1, $options) || $hi) { // high intensity equals regular bold
                 $fg += 10;
                 $bg += 10;
             }
