@@ -117,14 +117,26 @@ class AnsiToHtmlConverter
                 }
             }
 
-            // options: bold => 1, underscore => 4, blink => 5, reverse => 7, conceal => 8
+            // options: bold => 1, dim => 2, italic => 3, underscore => 4, blink => 5, rapid blink => 6, reverse => 7, conceal => 8, strikethrough => 9
             if (in_array(1, $options) || $hi) { // high intensity equals regular bold
                 $fg += 10;
                 // bold does not affect background color
             }
 
+            if (in_array(2, $options)) { // dim
+                $fg = ($fg >= 10) ? $fg - 10 : $fg;
+            }
+
+            if (in_array(3, $options)) {
+                $as .= '; font-style: italic';
+            }
+
             if (in_array(4, $options)) {
-                $as = '; text-decoration: underline';
+                $as .= '; text-decoration: underline';
+            }
+
+            if (in_array(9, $options)) {
+                $as .= '; text-decoration: line-through';
             }
 
             if (in_array(7, $options)) {
