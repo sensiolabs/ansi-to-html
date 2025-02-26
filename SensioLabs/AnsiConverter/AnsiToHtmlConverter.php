@@ -95,8 +95,9 @@ class AnsiToHtmlConverter
     {
         $bg = 0;
         $fg = 7;
-        $as = '';
-        $hi = false;
+        $as = ''; // inline styles
+        $cs = ''; // css classes
+        $hi = false; // high intensity
         if ('0' != $ansi && '' != $ansi) {
             $options = explode(';', $ansi);
 
@@ -129,14 +130,17 @@ class AnsiToHtmlConverter
 
             if (in_array(3, $options)) {
                 $as .= '; font-style: italic';
+                $cs .= ' ansi_color_italic';
             }
 
             if (in_array(4, $options)) {
                 $as .= '; text-decoration: underline';
+                $cs .= ' ansi_color_underline';
             }
 
             if (in_array(9, $options)) {
                 $as .= '; text-decoration: line-through';
+                $cs .= ' ansi_color_strikethrough';
             }
 
             if (in_array(7, $options)) {
@@ -149,7 +153,7 @@ class AnsiToHtmlConverter
         if ($this->inlineStyles) {
             return sprintf('</span><span style="background-color: %s; color: %s%s">', $this->inlineColors[$this->colorNames[$bg]], $this->inlineColors[$this->colorNames[$fg]], $as);
         } else {
-            return sprintf('</span><span class="ansi_color_bg_%s ansi_color_fg_%s">', $this->colorNames[$bg], $this->colorNames[$fg]);
+            return sprintf('</span><span class="ansi_color_bg_%s ansi_color_fg_%s%s">', $this->colorNames[$bg], $this->colorNames[$fg], $cs);
         }
     }
 

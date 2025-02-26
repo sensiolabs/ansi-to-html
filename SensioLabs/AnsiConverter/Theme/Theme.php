@@ -24,6 +24,10 @@ class Theme
             $css[] = sprintf('.%s_bg_%s { background-color: %s }', $prefix, $name, $color);
         }
 
+        $css[] = sprintf('.%s_italic { font-style: italic }', $prefix);
+        $css[] = sprintf('.%s_underline { text-decoration: underline }', $prefix);
+        $css[] = sprintf('.%s_strikethrough { text-decoration: line-through }', $prefix);
+
         return implode("\n", $css);
     }
 
