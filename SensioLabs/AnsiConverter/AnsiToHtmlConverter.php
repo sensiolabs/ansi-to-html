@@ -120,7 +120,7 @@ class AnsiToHtmlConverter
             // options: bold => 1, underscore => 4, blink => 5, reverse => 7, conceal => 8
             if (in_array(1, $options) || $hi) { // high intensity equals regular bold
                 $fg += 10;
-                $bg += 10;
+                // bold does not affect background color
             }
 
             if (in_array(4, $options)) {
