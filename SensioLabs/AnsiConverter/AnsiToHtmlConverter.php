@@ -140,14 +140,30 @@ class AnsiToHtmlConverter
         $tokens = array();
         preg_match_all("/(?:\e\[(.*?)m|(\x08))/", $text, $matches, PREG_OFFSET_CAPTURE);
 
+        $codes = array();
         $offset = 0;
         foreach ($matches[0] as $i => $match) {
             if ($match[1] - $offset > 0) {
                 $tokens[] = array('text', substr($text, $offset, $match[1] - $offset));
             }
-            $tokens[] = array("\x08" == $match[0] ? 'backspace' : 'color', $matches[1][$i][0]);
+
+            foreach (explode(';', $matches[1][$i][0]) as $code) {
+                if ('0' == $code || '' == $code) {
+                    $codes = array();
+                } else {
+                    // remove existing occurrence to avoid processing duplicate styles
+                    if (in_array($code, $codes) && ($key = array_search($code, $codes)) !== false) {
+                        unset($codes[$key]);
+                    }
+                }
+
+                $codes[] = $code;
+            }
+
+            $tokens[] = array("\x08" == $match[0] ? 'backspace' : 'color', implode(';', $codes));
             $offset = $match[1] + strlen($match[0]);
         }
+
         if ($offset < strlen($text)) {
             $tokens[] = array('text', substr($text, $offset));
         }

@@ -54,6 +54,9 @@ class AnsiToHtmlConverterTest extends \PHPUnit_Framework_TestCase
 
             // non valid unicode codepoints substitution (only available with PHP >= 5.4)
             PHP_VERSION_ID < 50400 ?: array('<span style="background-color: black; color: white">foo '."\xEF\xBF\xBD".'</span>', "foo \xF4\xFF\xFF\xFF"),
+
+            // codes in sequence - remember enabled styling like bold, italic, etc. (until we hit a reset)
+            array('<span style="background-color: black; color: lightgreen">foo</span><span style="background-color: black; color: lightgreen">bar</span><span style="background-color: black; color: white">foo</span>', "\e[1;32mfoo\e[32mbar\e[mfoo"),
         );
     }
 }
