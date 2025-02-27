@@ -99,7 +99,7 @@ class AnsiToHtmlConverter
         if ('0' != $ansi && '' != $ansi) {
             $options = explode(';', $ansi);
 
-            foreach ($options as $option) {
+            foreach ($options as $key => $option) {
                 if ($option >= 30 && $option < 38) {
                     $fg = $option - 30;
                 } elseif ($option >= 40 && $option < 48) {
@@ -108,6 +108,22 @@ class AnsiToHtmlConverter
                     $fg = 7;
                 } elseif (49 == $option) {
                     $bg = 0;
+                } elseif ($option >= 22 && $option < 30) { // 21 has varying effects, best to ignored it
+                    $unset = $option - 20;
+
+                    foreach ($options as $i => $v) {
+                        if ($v == $unset) {
+                            unset($options[$i]);
+                        }
+
+                        if (2 == $unset && 1 == $v) { // 22 also unsets bold
+                            unset($options[$i]);
+                        }
+
+                        if ($i >= $key) { // do not unset options after current position in parent loop
+                            break;
+                        }
+                    }
                 }
             }
 
