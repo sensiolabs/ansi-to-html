@@ -1,0 +1,39 @@
+name: "CI"
+
+on:
+    pull_request:
+    push:
+
+permissions:
+  contents: read
+
+jobs:
+    tests:
+        name: "PHP ${{ matrix.php-version }}"
+
+        runs-on: 'ubuntu-latest'
+
+        strategy:
+            matrix:
+                php-version:
+                    - '8.3'
+                    - '8.4'
+
+        steps:
+            - name: "Checkout code"
+              uses: actions/checkout@v4
+
+            - name: "Install PHP with extensions"
+              uses: shivammathur/setup-php@v2
+              with:
+                  coverage: "none"
+                  php-version: ${{ matrix.php-version }}
+                  ini-values: memory_limit=-1
+
+            - name: "Add PHPUnit matcher"
+              run: echo "::add-matcher::${{ runner.tool_cache }}/phpunit.json"
+
+            - run: composer install
+
+            - name: "Run tests"
+              run: vendor/bin/phpunit
