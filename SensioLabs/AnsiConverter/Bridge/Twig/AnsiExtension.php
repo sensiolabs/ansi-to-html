@@ -1,5 +1,14 @@
 <?php
 
+/*
+ * This file is part of ansi-to-html.
+ *
+ * (c) Fabien Potencier
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
 namespace SensioLabs\AnsiConverter\Bridge\Twig;
 
 use SensioLabs\AnsiConverter\AnsiToHtmlConverter;
@@ -9,12 +18,9 @@ use Twig\TwigFunction;
 
 class AnsiExtension extends AbstractExtension
 {
-    /** @var AnsiToHtmlConverter */
-    private $converter;
-
-    public function __construct(?AnsiToHtmlConverter $converter = null)
-    {
-        $this->converter = $converter ?: new AnsiToHtmlConverter();
+    public function __construct(
+        private AnsiToHtmlConverter $converter = new AnsiToHtmlConverter(),
+    ) {
     }
 
     public function getFilters(): array
@@ -39,10 +45,5 @@ class AnsiExtension extends AbstractExtension
     public function css(): string
     {
         return $this->converter->getTheme()->asCss();
-    }
-
-    public function getName(): string
-    {
-        return 'sensiolabs_ansi';
     }
 }

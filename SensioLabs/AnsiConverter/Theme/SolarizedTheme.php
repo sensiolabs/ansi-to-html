@@ -3,7 +3,7 @@
 /*
  * This file is part of ansi-to-html.
  *
- * (c) 2013 Fabien Potencier
+ * (c) Fabien Potencier
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -18,9 +18,9 @@ namespace SensioLabs\AnsiConverter\Theme;
  */
 class SolarizedTheme extends Theme
 {
-    public function asArray()
+    public function asArray(): array
     {
-        return array(
+        return [
             // normal
             'black' => '#073642',
             'red' => '#dc322f',
@@ -40,6 +40,6 @@ class SolarizedTheme extends Theme
             'brmagenta' => '#6c71c4',
             'brcyan' => '#93a1a1',
             'brwhite' => '#fdf6e3',
-        );
+        ];
     }
 }

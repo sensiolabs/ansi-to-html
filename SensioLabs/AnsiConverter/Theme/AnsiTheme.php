@@ -3,7 +3,7 @@
 /*
  * This file is part of ansi-to-html.
  *
- * (c) 2013 Fabien Potencier
+ * (c) Fabien Potencier
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -16,9 +16,9 @@ namespace SensioLabs\AnsiConverter\Theme;
  */
 class AnsiTheme extends Theme
 {
-    public function asArray()
+    public function asArray(): array
     {
-        return array(
+        return [
             // normal
             'black' => '#000000',
             'red' => '#AA0000',
@@ -38,6 +38,6 @@ class AnsiTheme extends Theme
             'brmagenta' => '#FF55FF',
             'brcyan' => '#55FFFF',
             'brwhite' => '#FFFFFF',
-        );
+        ];
     }
 }
