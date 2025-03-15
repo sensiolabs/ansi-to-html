@@ -18,22 +18,22 @@ class Theme
 {
     public function asCss($prefix = 'ansi_color')
     {
-        $css = array();
+        $css = [];
         foreach ($this->asArray() as $name => $color) {
-            $css[] = sprintf('.%s_fg_%s { color: %s }', $prefix, $name, $color);
-            $css[] = sprintf('.%s_bg_%s { background-color: %s }', $prefix, $name, $color);
+            $css[] = \sprintf('.%s_fg_%s { color: %s }', $prefix, $name, $color);
+            $css[] = \sprintf('.%s_bg_%s { background-color: %s }', $prefix, $name, $color);
         }
 
-        $css[] = sprintf('.%s_italic { font-style: italic }', $prefix);
-        $css[] = sprintf('.%s_underline { text-decoration: underline }', $prefix);
-        $css[] = sprintf('.%s_strikethrough { text-decoration: line-through }', $prefix);
+        $css[] = \sprintf('.%s_italic { font-style: italic }', $prefix);
+        $css[] = \sprintf('.%s_underline { text-decoration: underline }', $prefix);
+        $css[] = \sprintf('.%s_strikethrough { text-decoration: line-through }', $prefix);
 
         return implode("\n", $css);
     }
 
     public function asArray()
     {
-        return array(
+        return [
             'black' => 'black',
             'red' => 'darkred',
             'green' => 'green',
@@ -51,6 +51,6 @@ class Theme
             'brmagenta' => 'magenta',
             'brcyan' => 'lightcyan',
             'brwhite' => 'white',
-        );
+        ];
     }
 }

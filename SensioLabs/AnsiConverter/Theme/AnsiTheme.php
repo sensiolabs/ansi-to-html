@@ -18,7 +18,7 @@ class AnsiTheme extends Theme
 {
     public function asArray()
     {
-        return array(
+        return [
             // normal
             'black' => '#000000',
             'red' => '#AA0000',
@@ -38,6 +38,6 @@ class AnsiTheme extends Theme
             'brmagenta' => '#FF55FF',
             'brcyan' => '#55FFFF',
             'brwhite' => '#FFFFFF',
-        );
+        ];
     }
 }

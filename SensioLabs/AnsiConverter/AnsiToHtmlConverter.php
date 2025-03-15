@@ -30,11 +30,11 @@ class AnsiToHtmlConverter
         $this->inlineStyles = $inlineStyles;
         $this->charset = $charset;
         $this->inlineColors = $this->theme->asArray();
-        $this->colorNames = array(
+        $this->colorNames = [
             'black', 'red', 'green', 'yellow', 'blue', 'magenta', 'cyan', 'white',
             '', '',
             'brblack', 'brred', 'brgreen', 'bryellow', 'brblue', 'brmagenta', 'brcyan', 'brwhite',
-        );
+        ];
     }
 
     public function convert($text)
@@ -44,7 +44,7 @@ class AnsiToHtmlConverter
         // remove character set sequences
         $text = preg_replace('#\e(\(|\))(A|B|[0-2])#', '', $text);
 
-        $text = htmlspecialchars($text, PHP_VERSION_ID >= 50400 ? ENT_QUOTES | ENT_SUBSTITUTE : ENT_QUOTES, $this->charset);
+        $text = htmlspecialchars($text, \PHP_VERSION_ID >= 50400 ? \ENT_QUOTES | \ENT_SUBSTITUTE : \ENT_QUOTES, $this->charset);
 
         // carriage return
         $text = preg_replace('#^.*\r(?!\n)#m', '', $text);
@@ -56,7 +56,7 @@ class AnsiToHtmlConverter
             if ('backspace' == $token[0]) {
                 $j = $i;
                 while (--$j >= 0) {
-                    if ('text' == $tokens[$j][0] && strlen($tokens[$j][1]) > 0) {
+                    if ('text' == $tokens[$j][0] && '' !== $tokens[$j][1]) {
                         $tokens[$j][1] = substr($tokens[$j][1], 0, -1);
 
                         break;
@@ -75,9 +75,9 @@ class AnsiToHtmlConverter
         }
 
         if ($this->inlineStyles) {
-            $html = sprintf('<span style="background-color: %s; color: %s">%s</span>', $this->inlineColors['black'], $this->inlineColors['white'], $html);
+            $html = \sprintf('<span style="background-color: %s; color: %s">%s</span>', $this->inlineColors['black'], $this->inlineColors['white'], $html);
         } else {
-            $html = sprintf('<span class="ansi_color_bg_black ansi_color_fg_white">%s</span>', $html);
+            $html = \sprintf('<span class="ansi_color_bg_black ansi_color_fg_white">%s</span>', $html);
         }
 
         // remove empty span
@@ -135,31 +135,31 @@ class AnsiToHtmlConverter
             }
 
             // options: bold => 1, dim => 2, italic => 3, underscore => 4, blink => 5, rapid blink => 6, reverse => 7, conceal => 8, strikethrough => 9
-            if (in_array(1, $options) || $hi) { // high intensity equals regular bold
+            if (\in_array(1, $options) || $hi) { // high intensity equals regular bold
                 $fg += 10;
                 // bold does not affect background color
             }
 
-            if (in_array(2, $options)) { // dim
+            if (\in_array(2, $options)) { // dim
                 $fg = ($fg >= 10) ? $fg - 10 : $fg;
             }
 
-            if (in_array(3, $options)) {
+            if (\in_array(3, $options)) {
                 $as .= '; font-style: italic';
                 $cs .= ' ansi_color_italic';
             }
 
-            if (in_array(4, $options)) {
+            if (\in_array(4, $options)) {
                 $as .= '; text-decoration: underline';
                 $cs .= ' ansi_color_underline';
             }
 
-            if (in_array(9, $options)) {
+            if (\in_array(9, $options)) {
                 $as .= '; text-decoration: line-through';
                 $cs .= ' ansi_color_strikethrough';
             }
 
-            if (in_array(7, $options)) {
+            if (\in_array(7, $options)) {
                 $tmp = $fg;
                 $fg = $bg;
                 $bg = $tmp;
@@ -167,30 +167,30 @@ class AnsiToHtmlConverter
         }
 
         if ($this->inlineStyles) {
-            return sprintf('</span><span style="background-color: %s; color: %s%s">', $this->inlineColors[$this->colorNames[$bg]], $this->inlineColors[$this->colorNames[$fg]], $as);
+            return \sprintf('</span><span style="background-color: %s; color: %s%s">', $this->inlineColors[$this->colorNames[$bg]], $this->inlineColors[$this->colorNames[$fg]], $as);
         } else {
-            return sprintf('</span><span class="ansi_color_bg_%s ansi_color_fg_%s%s">', $this->colorNames[$bg], $this->colorNames[$fg], $cs);
+            return \sprintf('</span><span class="ansi_color_bg_%s ansi_color_fg_%s%s">', $this->colorNames[$bg], $this->colorNames[$fg], $cs);
         }
     }
 
     protected function tokenize($text)
     {
-        $tokens = array();
-        preg_match_all("/(?:\e\[(.*?)m|(\x08))/", $text, $matches, PREG_OFFSET_CAPTURE);
+        $tokens = [];
+        preg_match_all("/(?:\e\[(.*?)m|(\x08))/", $text, $matches, \PREG_OFFSET_CAPTURE);
 
-        $codes = array();
+        $codes = [];
         $offset = 0;
         foreach ($matches[0] as $i => $match) {
             if ($match[1] - $offset > 0) {
-                $tokens[] = array('text', substr($text, $offset, $match[1] - $offset));
+                $tokens[] = ['text', substr($text, $offset, $match[1] - $offset)];
             }
 
             foreach (explode(';', $matches[1][$i][0]) as $code) {
                 if ('0' == $code || '' == $code) {
-                    $codes = array();
+                    $codes = [];
                 } else {
                     // remove existing occurrence to avoid processing duplicate styles
-                    if (in_array($code, $codes) && ($key = array_search($code, $codes)) !== false) {
+                    if (\in_array($code, $codes) && ($key = array_search($code, $codes)) !== false) {
                         unset($codes[$key]);
                     }
                 }
@@ -198,12 +198,12 @@ class AnsiToHtmlConverter
                 $codes[] = $code;
             }
 
-            $tokens[] = array("\x08" == $match[0] ? 'backspace' : 'color', implode(';', $codes));
-            $offset = $match[1] + strlen($match[0]);
+            $tokens[] = ["\x08" == $match[0] ? 'backspace' : 'color', implode(';', $codes)];
+            $offset = $match[1] + \strlen($match[0]);
         }
 
-        if ($offset < strlen($text)) {
-            $tokens[] = array('text', substr($text, $offset));
+        if ($offset < \strlen($text)) {
+            $tokens[] = ['text', substr($text, $offset)];
         }
 
         return $tokens;
