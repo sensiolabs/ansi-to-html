@@ -101,7 +101,7 @@ class AnsiToHtmlConverter
         if ('0' != $ansi && '' != $ansi) {
             $options = explode(';', $ansi);
 
-            foreach ($options as $option) {
+            foreach ($options as $key => $option) {
                 if ($option >= 30 && $option < 38) {
                     $fg = $option - 30;
                 } elseif ($option >= 40 && $option < 48) {
@@ -115,6 +115,22 @@ class AnsiToHtmlConverter
                     $fg = 7;
                 } elseif (49 == $option) {
                     $bg = 0;
+                } elseif ($option >= 22 && $option < 30) { // 21 has varying effects, best to ignored it
+                    $unset = $option - 20;
+
+                    foreach ($options as $i => $v) {
+                        if ($v == $unset) {
+                            unset($options[$i]);
+                        }
+
+                        if (2 == $unset && 1 == $v) { // 22 also unsets bold
+                            unset($options[$i]);
+                        }
+
+                        if ($i >= $key) { // do not unset options after current position in parent loop
+                            break;
+                        }
+                    }
                 }
             }
 
@@ -162,14 +178,30 @@ class AnsiToHtmlConverter
         $tokens = array();
         preg_match_all("/(?:\e\[(.*?)m|(\x08))/", $text, $matches, PREG_OFFSET_CAPTURE);
 
+        $codes = array();
         $offset = 0;
         foreach ($matches[0] as $i => $match) {
             if ($match[1] - $offset > 0) {
                 $tokens[] = array('text', substr($text, $offset, $match[1] - $offset));
             }
-            $tokens[] = array("\x08" == $match[0] ? 'backspace' : 'color', $matches[1][$i][0]);
+
+            foreach (explode(';', $matches[1][$i][0]) as $code) {
+                if ('0' == $code || '' == $code) {
+                    $codes = array();
+                } else {
+                    // remove existing occurrence to avoid processing duplicate styles
+                    if (in_array($code, $codes) && ($key = array_search($code, $codes)) !== false) {
+                        unset($codes[$key]);
+                    }
+                }
+
+                $codes[] = $code;
+            }
+
+            $tokens[] = array("\x08" == $match[0] ? 'backspace' : 'color', implode(';', $codes));
             $offset = $match[1] + strlen($match[0]);
         }
+
         if ($offset < strlen($text)) {
             $tokens[] = array('text', substr($text, $offset));
         }
