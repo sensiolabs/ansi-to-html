@@ -18,7 +18,7 @@ use SensioLabs\AnsiConverter\AnsiToHtmlConverter;
 class AnsiToHtmlConverterTest extends TestCase
 {
     #[DataProvider('getConvertData')]
-    public function testConvert(string $expected, string $input): void
+    public function testConvert(string $expected, string $input)
     {
         $converter = new AnsiToHtmlConverter();
         $this->assertEquals($expected, $converter->convert($input));
