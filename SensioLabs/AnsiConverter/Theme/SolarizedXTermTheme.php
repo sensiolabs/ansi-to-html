@@ -18,7 +18,7 @@ namespace SensioLabs\AnsiConverter\Theme;
  */
 class SolarizedXTermTheme extends Theme
 {
-    public function asArray()
+    public function asArray(): array
     {
         return [
             // normal

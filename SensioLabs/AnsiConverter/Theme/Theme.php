@@ -16,7 +16,7 @@ namespace SensioLabs\AnsiConverter\Theme;
  */
 class Theme
 {
-    public function asCss($prefix = 'ansi_color')
+    public function asCss(string $prefix = 'ansi_color'): string
     {
         $css = [];
         foreach ($this->asArray() as $name => $color) {
@@ -31,7 +31,7 @@ class Theme
         return implode("\n", $css);
     }
 
-    public function asArray()
+    public function asArray(): array
     {
         return [
             'black' => 'black',

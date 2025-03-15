@@ -16,7 +16,7 @@ namespace SensioLabs\AnsiConverter\Theme;
  */
 class AnsiTheme extends Theme
 {
-    public function asArray()
+    public function asArray(): array
     {
         return [
             // normal

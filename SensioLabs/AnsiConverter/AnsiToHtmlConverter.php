@@ -18,17 +18,14 @@ use SensioLabs\AnsiConverter\Theme\Theme;
  */
 class AnsiToHtmlConverter
 {
-    protected $theme;
-    protected $charset;
-    protected $inlineStyles;
     protected $inlineColors;
     protected $colorNames;
 
-    public function __construct(?Theme $theme = null, $inlineStyles = true, $charset = 'UTF-8')
-    {
-        $this->theme = null === $theme ? new Theme() : $theme;
-        $this->inlineStyles = $inlineStyles;
-        $this->charset = $charset;
+    public function __construct(
+        protected Theme $theme = new Theme(),
+        protected bool $inlineStyles = true,
+        protected string $charset = 'UTF-8',
+    ) {
         $this->inlineColors = $this->theme->asArray();
         $this->colorNames = [
             'black', 'red', 'green', 'yellow', 'blue', 'magenta', 'cyan', 'white',
@@ -37,7 +34,7 @@ class AnsiToHtmlConverter
         ];
     }
 
-    public function convert($text)
+    public function convert(string $text): string
     {
         // remove cursor movement sequences
         $text = preg_replace('#\e\[(K|s|u|2J|2K|\d+(A|B|C|D|E|F|G|J|K|S|T)|\d+;\d+(H|f))#', '', $text);
@@ -86,12 +83,12 @@ class AnsiToHtmlConverter
         return $html;
     }
 
-    public function getTheme()
+    public function getTheme(): Theme
     {
         return $this->theme;
     }
 
-    protected function convertAnsiToColor($ansi)
+    protected function convertAnsiToColor(string $ansi): string
     {
         $bg = 0;
         $fg = 7;
@@ -173,7 +170,7 @@ class AnsiToHtmlConverter
         }
     }
 
-    protected function tokenize($text)
+    protected function tokenize(string $text): array
     {
         $tokens = [];
         preg_match_all("/(?:\e\[(.*?)m|(\x08))/", $text, $matches, \PREG_OFFSET_CAPTURE);

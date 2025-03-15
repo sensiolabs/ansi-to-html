@@ -11,21 +11,20 @@
 
 namespace SensioLabs\AnsiConverter\Tests;
 
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use SensioLabs\AnsiConverter\AnsiToHtmlConverter;
 
 class AnsiToHtmlConverterTest extends TestCase
 {
-    /**
-     * @dataProvider getConvertData
-     */
-    public function testConvert($expected, $input)
+    #[DataProvider('getConvertData')]
+    public function testConvert(string $expected, string $input): void
     {
         $converter = new AnsiToHtmlConverter();
         $this->assertEquals($expected, $converter->convert($input));
     }
 
-    public static function getConvertData()
+    public static function getConvertData(): array
     {
         return [
             // text is escaped

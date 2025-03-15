@@ -18,12 +18,9 @@ use Twig\TwigFunction;
 
 class AnsiExtension extends AbstractExtension
 {
-    /** @var AnsiToHtmlConverter */
-    private $converter;
-
-    public function __construct(?AnsiToHtmlConverter $converter = null)
-    {
-        $this->converter = $converter ?: new AnsiToHtmlConverter();
+    public function __construct(
+        private AnsiToHtmlConverter $converter = new AnsiToHtmlConverter(),
+    ) {
     }
 
     public function getFilters(): array
@@ -48,10 +45,5 @@ class AnsiExtension extends AbstractExtension
     public function css(): string
     {
         return $this->converter->getTheme()->asCss();
-    }
-
-    public function getName(): string
-    {
-        return 'sensiolabs_ansi';
     }
 }
