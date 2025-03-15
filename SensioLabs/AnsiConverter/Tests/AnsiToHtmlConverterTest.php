@@ -44,13 +44,34 @@ class AnsiToHtmlConverterTest extends \PHPUnit_Framework_TestCase
             array('<span style="background-color: darkred; color: darkred">foo</span>', "\e[31;41mfoo\e[m"),
 
             // bright color
-            array('<span style="background-color: red; color: red">foo</span>', "\e[31;41;1mfoo\e[0m"),
+            array('<span style="background-color: darkred; color: red">foo</span>', "\e[31;41;1mfoo\e[0m"),
 
             // carriage returns
             array('<span style="background-color: black; color: white">foobar</span>', "foo\rbar\rfoobar"),
 
             // underline
             array('<span style="background-color: black; color: white; text-decoration: underline">foo</span>', "\e[4mfoo\e[0m"),
+
+            // italic
+            array('<span style="background-color: black; color: white; font-style: italic">foo</span>', "\e[3mfoo\e[0m"),
+
+            // strikethrough
+            array('<span style="background-color: black; color: white; text-decoration: line-through">foo</span>', "\e[9mfoo\e[0m"),
+
+            // high intensity = normal bold
+            array('<span style="background-color: black; color: red">foo</span>', "\e[91mfoo\e[0m"),
+
+            // high intensity dimmed = normal
+            array('<span style="background-color: black; color: darkred">foo</span>', "\e[2;91mfoo\e[0m"),
+
+            // high intensity background
+            array('<span style="background-color: magenta; color: white">foo</span>', "\e[105mfoo\e[0m"),
+
+            // bold and background (bold does not affect background color)
+            array('<span style="background-color: darkred; color: lightcyan">foo</span>', "\e[1;41;36mfoo\e[0m"),
+
+            // bold and background (high intensity)
+            array('<span style="background-color: red; color: lightcyan">foo</span>', "\e[1;101;96mfoo\e[0m"),
 
             // non valid unicode codepoints substitution (only available with PHP >= 5.4)
             PHP_VERSION_ID < 50400 ?: array('<span style="background-color: black; color: white">foo '."\xEF\xBF\xBD".'</span>', "foo \xF4\xFF\xFF\xFF"),

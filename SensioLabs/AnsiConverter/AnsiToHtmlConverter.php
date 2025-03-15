@@ -95,7 +95,9 @@ class AnsiToHtmlConverter
     {
         $bg = 0;
         $fg = 7;
-        $as = '';
+        $as = ''; // inline styles
+        $cs = ''; // css classes
+        $hi = false; // high intensity
         if ('0' != $ansi && '' != $ansi) {
             $options = explode(';', $ansi);
 
@@ -104,6 +106,11 @@ class AnsiToHtmlConverter
                     $fg = $option - 30;
                 } elseif ($option >= 40 && $option < 48) {
                     $bg = $option - 40;
+                } elseif ($option >= 90 && $option < 98) {
+                    $fg = $option - 90;
+                    $hi = true;
+                } elseif ($option >= 100 && $option < 108) {
+                    $bg = $option - 90;
                 } elseif (39 == $option) {
                     $fg = 7;
                 } elseif (49 == $option) {
@@ -111,14 +118,29 @@ class AnsiToHtmlConverter
                 }
             }
 
-            // options: bold => 1, underscore => 4, blink => 5, reverse => 7, conceal => 8
-            if (in_array(1, $options)) {
+            // options: bold => 1, dim => 2, italic => 3, underscore => 4, blink => 5, rapid blink => 6, reverse => 7, conceal => 8, strikethrough => 9
+            if (in_array(1, $options) || $hi) { // high intensity equals regular bold
                 $fg += 10;
-                $bg += 10;
+                // bold does not affect background color
+            }
+
+            if (in_array(2, $options)) { // dim
+                $fg = ($fg >= 10) ? $fg - 10 : $fg;
+            }
+
+            if (in_array(3, $options)) {
+                $as .= '; font-style: italic';
+                $cs .= ' ansi_color_italic';
             }
 
             if (in_array(4, $options)) {
-                $as = '; text-decoration: underline';
+                $as .= '; text-decoration: underline';
+                $cs .= ' ansi_color_underline';
+            }
+
+            if (in_array(9, $options)) {
+                $as .= '; text-decoration: line-through';
+                $cs .= ' ansi_color_strikethrough';
             }
 
             if (in_array(7, $options)) {
@@ -131,7 +153,7 @@ class AnsiToHtmlConverter
         if ($this->inlineStyles) {
             return sprintf('</span><span style="background-color: %s; color: %s%s">', $this->inlineColors[$this->colorNames[$bg]], $this->inlineColors[$this->colorNames[$fg]], $as);
         } else {
-            return sprintf('</span><span class="ansi_color_bg_%s ansi_color_fg_%s">', $this->colorNames[$bg], $this->colorNames[$fg]);
+            return sprintf('</span><span class="ansi_color_bg_%s ansi_color_fg_%s%s">', $this->colorNames[$bg], $this->colorNames[$fg], $cs);
         }
     }
 
