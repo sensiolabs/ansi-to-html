@@ -18,8 +18,8 @@ use SensioLabs\AnsiConverter\Theme\Theme;
  */
 class AnsiToHtmlConverter
 {
-    protected $inlineColors;
-    protected $colorNames;
+    protected array $inlineColors;
+    protected array $colorNames;
 
     public function __construct(
         protected Theme $theme = new Theme(),
@@ -99,6 +99,7 @@ class AnsiToHtmlConverter
             $options = explode(';', $ansi);
 
             foreach ($options as $key => $option) {
+                $option = (int) $option;
                 if ($option >= 30 && $option < 38) {
                     $fg = $option - 30;
                 } elseif ($option >= 40 && $option < 48) {
