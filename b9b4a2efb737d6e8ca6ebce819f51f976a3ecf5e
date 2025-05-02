@@ -1,0 +1,17 @@
+---------------------------------------------------------------------------
+
+by smnandre at 2025-05-02T01:21:24Z
+
+fabbot unhappy because of the void in the test file. An other choice would be adding specific exclusion in phpstan.neon.
+
+Not sure it's worth it for a single return type 🤷
+
+---------------------------------------------------------------------------
+
+by fabpot at 2025-05-02T09:15:41Z
+
+> fabbot unhappy because of the void in the test file. An other choice would be adding specific exclusion in phpstan.neon.
+>
+> Not sure it's worth it for a single return type 🤷
+
+Not using `void` is part of our CS, so let's fix it. If not, we'll never be able to make it green.
